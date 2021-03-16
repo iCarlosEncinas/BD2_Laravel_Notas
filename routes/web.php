@@ -2,8 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-
-
+use Illuminate\Http\Request;
+use App\Models\Notas;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,31 +14,15 @@ use Illuminate\Support\Facades\DB;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('notas', function() {
-    $notas = DB::table('notas')->get();
-    /*[
-        'primera nota',
-        'segunda nota',
-        'tercera nota',
-        'cuarta nota',
-        'quinta nota',
-    ];*/
+Route::get('notas', 'App\Http\Controllers\NotasController@welcome')->name('notas.index');
 
-    return view('notas', ['notas' => $notas]);
-});
+Route::get('notas', 'App\Http\Controllers\NotasController@index')->name('notas.index');
 
-Route::get('agregar', function() {
-    return view('agregar');
-});
+Route::get('agregar', 'App\Http\Controllers\NotasController@vistaAgregar')->name('notas.agregar');
 
-Route::get('notas/{id}/editar', function ($id){
-    $notas = DB::table('notas')
-        ->where('id', $id)
-        ->first();
-        return view('editar', ['notas' => $notas]);
-        #return 'Aqui se van a editar las notas' .$id;
-})->name('notas.edit');
+Route::post('crear', 'App\Http\Controllers\NotasController@crear')->name('notas.store');
+
+Route::get('notas/{id}/editar', 'App\Http\Controllers\NotasController@edit')->name('notas.edit');
+
+Route::put('notas/{notas}/editar', 'App\Http\Controllers\NotasController@update' )->name('notas.update');
